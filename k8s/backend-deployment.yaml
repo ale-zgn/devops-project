@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: my-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: dev-book-master-backend:latest
+        ports:
+        - containerPort: 5000
+        env:
+          - name: NODE_ENV
+            value: "development"
+          - name: MONGO_URL
+            value: "mongodb+srv://aleezegneni_db_user:123456A@cluster0.vcg6dxb.mongodb.net/?appName=Cluster0"
