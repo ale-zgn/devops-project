@@ -100,8 +100,6 @@ Checkout code from GitHub
 
 Build Docker images (frontend & backend)
 
-Scan images using Trivy
-
 Push images to Docker Hub
 
 Deploy to Kubernetes (optional with Helm/ArgoCD)
@@ -112,49 +110,31 @@ Kubernetes Deployment
 Create Cluster
 bash
 Copy code
-minikube start --cpus=2 --memory=4096
+minikube start 
 Deploy Manifests
-bash
-Copy code
+
 kubectl apply -f k8s/
+
 Services & Deployments for backend and frontend are included
 
 Use kubectl get pods to verify all pods are running
 
 Port Forwarding
-bash
-Copy code
-kubectl port-forward svc/frontend-service 3000:80
-kubectl port-forward svc/backend-service 5000:5000
+
+ minikube service frontend-service -n my-app
+ minikube service backend-service -n my-app
+
+
 Helm & ArgoCD
 Helm Charts
 Located in helm/ directory for each service
 
-Install chart:
-
-helm install backend helm/backend
-helm install frontend helm/frontend
-
-
-ArgoCD GitOps
-Install ArgoCD in your cluster
-
-Expose ArgoCD server:
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-Access dashboard: https://localhost:8080
-
-Login using initial admin secret:
-
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode
-Create ArgoCD application pointing to your Git repo
 
 Accessing the Application
 Frontend: http://localhost:3000 (or forwarded port)
 
 Backend API: http://localhost:5000 (or forwarded port)
 
-Monitoring with Prometheus & Grafana
-Deploy Prometheus & Grafana using Helm or manifests
 
 
 
