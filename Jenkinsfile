@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS = credentials('dockerhub-user') // single Jenkins credential ID
+        DOCKER_CREDENTIALS = credentials('dockerhub-user') // Jenkins credential ID
     }
 
     stages {
@@ -16,7 +16,7 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('server') {
-                    bat 'docker build --no-cache -t myuser/backend:latest .'
+                    bat 'docker build --no-cache -t aleezgn/backend:latest .'
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('client') {
-                    bat 'docker build --no-cache -t myuser/frontend:latest .'
+                    bat 'docker build --no-cache -t aleezgn/frontend:latest .'
                 }
             }
         }
@@ -33,8 +33,8 @@ pipeline {
             steps {
                 bat '''
                 if exist C:\\Trivy\\trivy.exe (
-                    C:\\Trivy\\trivy.exe image --exit-code 1 --severity HIGH myuser/backend:latest || echo "Trivy backend scan failed, continuing..."
-                    C:\\Trivy\\trivy.exe image --exit-code 1 --severity HIGH myuser/frontend:latest || echo "Trivy frontend scan failed, continuing..."
+                    C:\\Trivy\\trivy.exe image --exit-code 1 --severity HIGH aleezgn/backend:latest || echo "Trivy backend scan failed, continuing..."
+                    C:\\Trivy\\trivy.exe image --exit-code 1 --severity HIGH aleezgn/frontend:latest || echo "Trivy frontend scan failed, continuing..."
                 ) else (
                     echo "Trivy not found, skipping scan..."
                 )
@@ -46,8 +46,8 @@ pipeline {
             steps {
                 bat '''
                 echo %DOCKER_CREDENTIALS_PSW% | docker login -u %DOCKER_CREDENTIALS_USR% --password-stdin
-                docker push myuser/backend:latest
-                docker push myuser/frontend:latest
+                docker push aleezgn/backend:latest
+                docker push aleezgn/frontend:latest
                 '''
             }
         }
