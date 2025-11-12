@@ -44,10 +44,13 @@ pipeline {
 
         stage('Push Images') {
             steps {
-                bat 'docker login -u %DOCKER_CREDENTIALS_USR% -p %DOCKER_CREDENTIALS_PSW%'
-                bat 'docker push myuser/backend:latest'
-                bat 'docker push myuser/frontend:latest'
+                bat '''
+                echo %DOCKER_CREDENTIALS_PSW% | docker login -u %DOCKER_CREDENTIALS_USR% --password-stdin
+                docker push myuser/backend:latest
+                docker push myuser/frontend:latest
+                '''
             }
         }
+
     }
 }
