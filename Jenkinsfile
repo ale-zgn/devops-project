@@ -16,7 +16,8 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('server') {
-                    bat 'docker build --no-cache -t aleezgn/backend:latest .'
+                    bat 'docker build --no-cache -t 
+                     .'
                 }
             }
         }

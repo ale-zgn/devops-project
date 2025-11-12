@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: dev-book-master-backend:latest
+        image: aleezgn/backend:latest
         ports:
         - containerPort: 5000
         env:
