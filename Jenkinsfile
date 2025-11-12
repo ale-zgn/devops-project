@@ -16,7 +16,7 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('server') {
-                    bat 'docker build -t myuser/backend:latest .'
+                    bat 'docker build --no-cache -t myuser/backend:latest .'
                 }
             }
         }
@@ -24,15 +24,15 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('client') {
-                    bat 'docker build -t myuser/frontend:latest .'
+                    bat 'docker build --no-cache -t myuser/frontend:latest .'
                 }
             }
         }
 
         stage('Scan Images') {
             steps {
-                bat 'trivy image myuser/backend:latest'
-                bat 'trivy image myuser/frontend:latest'
+                bat 'trivy image --exit-code 1 --severity HIGH myuser/backend:latest'
+                bat 'trivy image --exit-code 1 --severity HIGH myuser/frontend:latest'
             }
         }
 
