@@ -18,3 +18,9 @@ backend:
   service:
     type: ClusterIP
     port: 5000
+
+serviceAccount:
+  create: true
+  name: ""
+  automount: true
+  annotations: {}
