@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_USER = credentials('dockerhub-user') // set in Jenkins credentials
-        DOCKER_PASS = credentials('dockerhub-pass')
+        DOCKER_CREDENTIALS = credentials('dockerhub-user') // single Jenkins credential ID
     }
 
     stages {
@@ -16,7 +15,7 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('server') { // folder containing backend Dockerfile
+                dir('server') {
                     sh 'docker build -t myuser/backend:latest .'
                 }
             }
@@ -24,7 +23,7 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                dir('client') { // folder containing frontend Dockerfile
+                dir('client') {
                     sh 'docker build -t myuser/frontend:latest .'
                 }
             }
@@ -39,7 +38,10 @@ pipeline {
 
         stage('Push Images') {
             steps {
-                sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                // Jenkins automatically sets:
+                // $DOCKER_CREDENTIALS_USR → username
+                // $DOCKER_CREDENTIALS_PSW → password
+                sh 'echo $DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR --password-stdin'
                 sh 'docker push myuser/backend:latest'
                 sh 'docker push myuser/frontend:latest'
             }
